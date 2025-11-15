@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { criarMatricula } from "../../services/matriculaService";
 import { ModalMatricularCursoProps } from "../../models/props/modalMatricularCursoProps";
+import { toast } from "../ui/use-toast";
 
 
 export function ModalMatricularCurso({ isOpen, onClose, cursoId, alunosDisponiveis, onMatriculaConcluida }: ModalMatricularCursoProps) {
@@ -10,7 +11,10 @@ export function ModalMatricularCurso({ isOpen, onClose, cursoId, alunosDisponive
 
   const handleSubmit = async () => {
     if (!alunoSelecionado) {
-      alert("Selecione um aluno");
+      toast({
+        title: "Selecione um aluno!",
+        variant: "default"
+      })
       return;
     }
     const payload = {
@@ -20,11 +24,17 @@ export function ModalMatricularCurso({ isOpen, onClose, cursoId, alunosDisponive
 
     try {
       await criarMatricula(payload);
-      alert("Matrícula realizada com sucesso!");
+      toast({
+        title: "Matrícula realizada com sucesso!",
+        variant: "default"
+      })
       onMatriculaConcluida();
     } catch (err: any) {
       console.error(err?.response?.data);
-      alert("Erro ao matricular aluno.");
+      toast({
+        title: "Erro ao matricular o aluno",
+        variant: "destructive"
+      })
     }
   };
 

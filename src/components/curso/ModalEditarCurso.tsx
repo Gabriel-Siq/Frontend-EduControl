@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import { deletarMatricula } from "../../services/matriculaService";
 import { ModalExcluir } from "../ModalExcluir";
 import { ModalMatricularCurso } from "../matricula/ModalMatricularCurso";
+import { toast } from "../ui/use-toast";
 
 export function ModalEditarCurso({ isOpen, onClose, onDadosAtualizados, dadosCurso, alunosMatriculados, todosAlunos }: ModalEditarCursoProps) {
   if (!isOpen) return null;
@@ -36,12 +37,18 @@ export function ModalEditarCurso({ isOpen, onClose, onDadosAtualizados, dadosCur
 
     try {
       await atualizarCurso(dadosCurso.cursoId, payload);
-      alert("Curso editado com sucesso!");
+      toast({
+        title: "Curso editado com sucesso!",
+        variant: "default"
+      })
       onDadosAtualizados();
       onClose();
     } catch (error) {
       console.error("Erro ao editar curso:", error);
-      alert("Erro ao editar curso");
+      toast({
+        title: "Erro ao editar curso",
+        variant: "destructive"
+      })
     }
   };
 

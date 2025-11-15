@@ -7,6 +7,7 @@ import { ModalExcluir } from "../ModalExcluir";
 import { listarCursos } from "../../services/cursoService";
 import { deletarMatricula } from "../../services/matriculaService";
 import { ModalMatricularAluno } from "../matricula/ModalMatricularAluno";
+import { toast } from "../ui/use-toast";
 
 export function ModalEditarAluno({ isOpen, onClose, dadosAluno, cursosMatriculados, onDadosAtualizados }: ModalEditarAlunoProps) {
   if (!isOpen) return null;
@@ -72,18 +73,28 @@ export function ModalEditarAluno({ isOpen, onClose, dadosAluno, cursosMatriculad
     }
 
     if(!isAdulto(payload.dataNascimento)){
-      alert("Não é possível cadastrar aluno com menos de 18 anos.")
+      toast({
+        title: "Data de nascimento inválida",
+        description: "Não é permitido cadastrar alunos com menos de 18 anos",
+        variant: "destructive"
+      })
       return
     }
 
     try {
       await atualizarAluno(dadosAluno.alunoId, payload);
-      alert("Aluno editado com sucesso!");
+      toast({
+        title: "Aluno editado com sucesso!",
+        variant: "default"
+      })
       onDadosAtualizados();
       onClose();
     } catch (error) {
       console.error("Erro ao editar aluno:", error);
-      alert("Erro ao editar aluno");
+      toast({
+        title: "Erro ao editar aluno",
+        variant: "destructive"
+      })
     }
   };
 

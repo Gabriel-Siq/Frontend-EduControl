@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ModalCriarCursoProps } from "../../models/props/modalCriarCursoProps";
 import { criarCurso } from "../../services/cursoService";
+import { toast } from "../ui/use-toast";
 
 export function ModalCriarCurso({ isOpen, onClose, onCursoCriado }: ModalCriarCursoProps) {
   if (!isOpen) return null;
@@ -24,12 +25,18 @@ export function ModalCriarCurso({ isOpen, onClose, onCursoCriado }: ModalCriarCu
 
     try {
       await criarCurso(payload);
-      alert("Curso criado com sucesso!");
+      toast({
+        title: "Curso criado com sucesso!",
+        variant: "default"
+      })
       onClose();
       onCursoCriado();
     } catch (error) {
       console.error("Erro ao criar curso:", error);
-      alert("Erro ao criar curso");
+      toast({
+        title: "Erro ao criar aluno",
+        variant: "destructive"
+      })
     }
   };
 

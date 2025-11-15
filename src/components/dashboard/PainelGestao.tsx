@@ -300,7 +300,7 @@ export default function PainelGestao() {
                     </td>
                     <td className="py-4 px-4">
                       <p className="text-sm font-medium text-muted-foreground line-clamp-2">
-                        {aluno.dataNascimento ? new Date(aluno.dataNascimento).toLocaleDateString("pt-BR") : "-"}
+                        {aluno.dataNascimento ? new Date(aluno.dataNascimento).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : "-"}
                       </p>
                     </td>
                     <td className="py-4 px-4">

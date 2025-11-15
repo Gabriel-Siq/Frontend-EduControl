@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { ModalCriarAlunoProps } from "../../models/props/modalCriarAlunoProps";
 import { criarAluno } from "../../services/alunoService";
+import { useToast } from "../ui/use-toast";
 
 export function ModalCriarAluno({ isOpen, onClose, onAlunoCriado }: ModalCriarAlunoProps) {
   if (!isOpen) return null;
+
+  const { toast } = useToast();
 
   const [novoAluno, setNovoAluno] = useState({
     nome: "",
@@ -37,18 +40,28 @@ export function ModalCriarAluno({ isOpen, onClose, onAlunoCriado }: ModalCriarAl
     }
 
     if(!isAdulto(payload.dataNascimento)){
-      alert("Não é possível cadastrar aluno com menos de 18 anos.")
+      toast({
+        title: "Data de nascimento inválida",
+        description: "Não é permitido cadastrar alunos com menos de 18 anos",
+        variant: "destructive"
+      })
       return
     }
 
     try {
       await criarAluno(payload);
-      alert("Aluno criado com sucesso!");
+      toast({
+        title: "Aluno criado com sucesso!",
+        variant: "default"
+      })
       onClose();
       onAlunoCriado();
     } catch (error) {
       console.error("Erro ao criar aluno:", error);
-      alert("Erro ao criar aluno");
+      toast({
+        title: "Erro ao criar aluno",
+        variant: "destructive"
+      })
     }
   };
 

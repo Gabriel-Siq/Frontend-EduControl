@@ -21,6 +21,5 @@ export async function atualizarCurso(id: number, dto: AtualizarCursoDTO): Promis
 }
 
 export async function deletarCurso(id: number): Promise<void> {
-  console.log(id)
   await api.delete(`${BASE_URL}/${id}`);
 }

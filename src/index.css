@@ -16,7 +16,6 @@ body {
   font-weight: 400;
 }
 
-/* Links */
 a {
   color: #4f46e5;
   font-weight: 500;
@@ -27,7 +26,6 @@ a:hover {
   color: #3730a3;
 }
 
-/* Botões */
 button {
   border-radius: 8px;
   border: 1px solid transparent;

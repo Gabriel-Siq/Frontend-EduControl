@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import { Aluno } from "../../models/aluno";
 import { Curso } from "../../models/curso";
-import { listarAlunos } from "../../services/alunoService";
+import { deletarAluno, listarAlunos } from "../../services/alunoService";
 import { deletarCurso, listarCursos } from "../../services/cursoService";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { ModalCriarAluno } from "../aluno/ModalCriarAluno";
@@ -44,7 +44,7 @@ export default function PainelGestao() {
   const [modalCriarCursoOpen, setModalCriarCursoOpen] = useState(false);
   const [modalEditarCursoOpen, setModalEditarCursoOpen] = useState(false);
   
-  const [modalExcluirOpen, setModalExcluirOpen] = useState(false);
+  const [acaoExcluir, setAcaoExcluir] = useState<{isOpen: boolean; mensagem: string; onConfirm: () => void;} | null>(null);
   
   const [alunoSelecionado, setAlunoSelecionado] = useState<Aluno | null>(null);
   const [cursoSelecionado, setCursoSelecionado] = useState<Curso | null>(null);
@@ -114,6 +114,32 @@ export default function PainelGestao() {
   useEffect(() => {
     handleRecarregarDados();
   }, [])
+
+  const handleAbrirModalExcluirCurso = (curso: Curso) => {
+    setAcaoExcluir({
+      isOpen: true,
+      mensagem: `Tem certeza que deseja excluir o curso "${curso.nome}" e todas as suas matrículas?`,
+      onConfirm: async () => {
+        await deletarCurso(curso.cursoId);
+        handleGetCursos();
+        handleGetMatriculas();
+        setAcaoExcluir(null);
+      },
+    });
+  };
+
+  const handleAbrirModalExcluirAluno = (aluno: Aluno) => {
+    setAcaoExcluir({
+      isOpen: true,
+      mensagem: `Tem certeza que deseja excluir o aluno "${aluno.nome}" e todas as suas matrículas?`,
+      onConfirm: async () => {
+        await deletarAluno(aluno.alunoId); 
+        handleGetAlunos();
+        handleGetMatriculas();
+        setAcaoExcluir(null);
+      },
+    });
+  };
 
   return (
     <main className="flex-1 p-8">
@@ -196,21 +222,7 @@ export default function PainelGestao() {
                       />
                       <Trash2
                         className="w-5 h-5 text-red-600 hover:text-red-800 cursor-pointer transition"
-                        onClick={() => {
-                          setCursoSelecionado(curso);
-                          setModalExcluirOpen(true);
-                        }}
-                      />
-                      <ModalExcluir
-                        isOpen={modalExcluirOpen}
-                        onClose={() => setModalExcluirOpen(false)}
-                        mensagem={`Tem certeza que deseja excluir o curso ${cursoSelecionado?.nome} e suas matrículas?`}
-                        onConfirm={async () => {
-                          if (cursoSelecionado) {
-                            await deletarCurso(cursoSelecionado.cursoId);
-                            handleGetCursos();
-                          }
-                        }}
+                        onClick={() => {handleAbrirModalExcluirCurso(curso)}}
                       />
                     </td>
                   </tr>
@@ -309,10 +321,7 @@ export default function PainelGestao() {
                       />
                       <Trash2
                         className="w-5 h-5 text-red-600 hover:text-red-800 cursor-pointer transition"
-                        onClick={() => {
-                          setAlunoSelecionado(aluno);
-                          setModalExcluirOpen(true);
-                        }}
+                        onClick={() => {handleAbrirModalExcluirAluno(aluno)}}
                       />
                     </td>
                   </tr>
@@ -327,6 +336,14 @@ export default function PainelGestao() {
               </div>
             </table>
           </div>
+        )}
+        {acaoExcluir && (
+          <ModalExcluir
+            isOpen={acaoExcluir.isOpen}
+            onClose={() => setAcaoExcluir(null)}
+            mensagem={acaoExcluir.mensagem}
+            onConfirm={acaoExcluir.onConfirm}
+          />
         )}
       </div>
     </main>

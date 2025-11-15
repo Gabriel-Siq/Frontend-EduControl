@@ -11,7 +11,7 @@ import { ModalMatricularAluno } from "../matricula/ModalMatricularAluno";
 export function ModalEditarAluno({ isOpen, onClose, dadosAluno, cursosMatriculados, onDadosAtualizados }: ModalEditarAlunoProps) {
   if (!isOpen) return null;
 
-  const [cursoSelecionado, setCursoSelecionado] = useState<Curso | null>(null);
+  const [_, setCursoSelecionado] = useState<Curso | null>(null);
   const [cursosDisponiveis, setCursosDisponiveis] = useState<Curso[]>([]);
 
   const [modalExcluirOpen, setModalExcluirOpen] = useState(false);

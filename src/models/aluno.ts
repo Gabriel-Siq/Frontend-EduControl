@@ -1,4 +1,3 @@
-import { Curso } from "./curso";
 import { Matricula } from "./matricula";
 
 export interface Aluno {

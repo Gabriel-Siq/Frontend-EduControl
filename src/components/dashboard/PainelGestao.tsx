@@ -17,7 +17,7 @@ import { listarMatriculas } from "../../services/matriculaService";
 export default function PainelGestao() {
   const [abaAtiva, setAbaAtiva] = useState<"cursos" | "alunos">("cursos");
   
-  const [loading, setLoading] = useState(true);
+  const [_, setLoading] = useState(true);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const itensPorPagina = 5;
   const indexInicio = (paginaAtual - 1) * itensPorPagina;

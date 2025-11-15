@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { criarMatricula } from "../../services/matriculaService";
-import { Aluno } from "../../models/aluno";
 import { ModalMatricularCursoProps } from "../../models/props/modalMatricularCursoProps";
 
 
